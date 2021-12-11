@@ -3,10 +3,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MarketingModel extends CI_Model {
 
-	public function index(){
-		$this->db->select('*');
+	public function index()
+	{
+		$this->db->select('*, users.name as user_name');
 		$this->db->from('salesmen');
 		$this->db->join('users', 'users.id = salesmen.user_id', 'inner');
+		$this->db->join('indonesia_cities city', 'city.id = salesmen.city_id', 'inner');
+
+//		$this->db->where('role', null);
+		return $this->db->get()->result();
+	}
+
+	public function picMarketing()
+	{
+		$this->load->model('CityModel', 'city');
+
+		$this->db->select('*, users.name as user_name');
+		$this->db->from('salesmen');
+		$this->db->join('users', 'users.id = salesmen.user_id', 'inner');
+		$this->db->join('indonesia_cities city', 'city.id = salesmen.city_id', 'inner');
+
 		return $this->db->get()->result();
 	}
 

@@ -29,10 +29,46 @@ class Home extends CI_Controller {
 		
 	}
 
-	public function marketing(){
-		$this->load->model('MarketingModel', 'salesmen');
-		$data['salesmen'] = $this->salesmen->index();
-		$this->load->view('pages/dashboard/master_marketing', $data);
+	public function marketing()
+	{
+		if ($this->input->post()) {
+			$this->db->where('id', $this->input->post('city_id'));
+			$exists = $this->db->get('indonesia_cities')->result();
+
+			if (count($exists) > 0) {
+
+				foreach ($exists as $e) {
+					$this->db->where('id', $e->user_id);
+					$this->db->update('users', array('role' => null));
+				}
+
+				$this->db->where('id', $this->input->post('user_id'));
+				$this->db->update('users', array('role' => 'pic'));
+
+				$this->db->where('id', $this->input->post('city_id'));
+				$this->db->update('indonesia_cities', array('user_id' => $this->input->post('user_id')));
+			} else {
+				$this->db->where('id', $this->input->post('user_id'));
+				$this->db->update('users', array('role' => 'pic'));
+
+				$this->db->where('id', $this->input->post('city_id'));
+				$this->db->update('indonesia_cities', array('user_id' => $this->input->post('user_id')));
+			}
+
+			return redirect($_SERVER['HTTP_REFERER']);
+		} else {
+			$admin = $this->session->userdata('is_admin');
+
+			$this->load->model('CityModel', 'city');
+			$this->load->model('MarketingModel', 'salesmen');
+
+			$data['city'] = $this->city->cities();
+			$data['salesmen'] = $this->salesmen->index();
+			$data['marketing'] = $this->salesmen->picMarketing();
+			$data['admin'] = $admin;
+
+			$this->load->view('pages/dashboard/master_marketing', $data);
+		}
 	}
 
 	public function merchant(){
