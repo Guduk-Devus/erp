@@ -90,7 +90,7 @@
           							</td>
           							<td><?php echo date_format(date_create($m->created_at), 'd M Y') ?></td>
           							<td>
-          								<a href="<?php echo base_url('merchant/'.$m->id) ?>" class="btn btn-info"><i class="fas fa-info"></i>&nbsp; Detail</a>
+          								<a href="<?php echo base_url('home/merchant_detail/' . $m->merchant_id . '/' . $m->merchant_type) ?>" class="btn btn-info"><i class="fas fa-info"></i>&nbsp; Detail</a>
           							</td>
           						</tr>
           					<?php endforeach ?>

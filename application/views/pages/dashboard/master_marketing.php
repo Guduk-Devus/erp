@@ -128,7 +128,7 @@
 						  <select class="custom-select custom-select-sm" name="user_id" id="statusFilter">
 							  <option value="" selected>- Pick Marketing -</option>
 							  <?php foreach ($salesmen as $key => $s): ?>
-							  	<option value="<?php echo $s->id ?>"><?php echo $s->name ?></option>
+							  	<option value="<?php echo $s->user_id ?>"><?php echo $s->user_name ?></option>
 							  <?php endforeach ?>
 						  </select>
 					  </div>

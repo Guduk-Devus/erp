@@ -5,7 +5,7 @@ class MarketingModel extends CI_Model {
 
 	public function index()
 	{
-		$this->db->select('*, users.name as user_name');
+		$this->db->select('*, users.id as user_id, users.name as user_name');
 		$this->db->from('salesmen');
 		$this->db->join('users', 'users.id = salesmen.user_id', 'inner');
 		$this->db->join('indonesia_cities city', 'city.id = salesmen.city_id', 'inner');
@@ -30,11 +30,15 @@ class MarketingModel extends CI_Model {
 		return $this->db->insert('merchants', $object);
 	}
 
-	public function getMerchant($numrowsOnly = FALSE){
+	public function getMerchant($numrowsOnly = FALSE) {
 		$q = $this->db->get('merchants', ['salesman_id' => $this->session->userdata('item')]);
 		return $numrowsOnly ? $q->result() : $q->num_rows();
 	}
 
+	public function getReferralCode($numrowsOnly = FALSE)
+	{
+		return $this->db->get_where('salesmen', ['user_id' => $this->session->userdata('id')])->row()->code_referral;
+	}
 }
 
 /* End of file MarketingModel.php */

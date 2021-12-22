@@ -18,8 +18,10 @@ class Home extends CI_Controller {
 				$this->load->model('MarketingModel', 'marketing');
 				$data['target'] = [
 					'target' => 2500,
-					'actual' => $this->marketing->getMerchant()
+					'actual' => $this->marketing->getMerchant(),
+					'referral' => $this->marketing->getReferralCode(),
 				];
+
 				$data['merchant'] = $this->marketing->getMerchant(TRUE);
 				$this->load->view('pages/sales_dashboard/home', $data);
 			}
@@ -32,46 +34,34 @@ class Home extends CI_Controller {
 	public function marketing()
 	{
 		if ($this->input->post()) {
-			$this->db->where('id', $this->input->post('city_id'));
-			$exists = $this->db->get('indonesia_cities')->result();
-
-			if (count($exists) > 0) {
-
-				foreach ($exists as $e) {
-					$this->db->where('id', $e->user_id);
-					$this->db->update('users', array('role' => null));
-				}
-
-				$this->db->where('id', $this->input->post('user_id'));
-				$this->db->update('users', array('role' => 'pic'));
-
-				$this->db->where('id', $this->input->post('city_id'));
-				$this->db->update('indonesia_cities', array('user_id' => $this->input->post('user_id')));
-			} else {
-				$this->db->where('id', $this->input->post('user_id'));
-				$this->db->update('users', array('role' => 'pic'));
-
-				$this->db->where('id', $this->input->post('city_id'));
-				$this->db->update('indonesia_cities', array('user_id' => $this->input->post('user_id')));
-			}
-
-			return redirect($_SERVER['HTTP_REFERER']);
-		} else {
-			$admin = $this->session->userdata('is_admin');
+			$data = array(
+				'user_id' => $this->input->post('user_id'),
+				'city_id' => $this->input->post('city_id'),
+			);
 
 			$this->load->model('CityModel', 'city');
-			$this->load->model('MarketingModel', 'salesmen');
+			if ($this->city->updateCityPic($data)) {
+				return redirect($_SERVER['HTTP_REFERER']);
+			} else {
+				return "error mas";
+			}
+	 } else {
+		$admin = $this->session->userdata('is_admin');
 
-			$data['city'] = $this->city->cities();
-			$data['salesmen'] = $this->salesmen->index();
-			$data['marketing'] = $this->salesmen->picMarketing();
-			$data['admin'] = $admin;
+		$this->load->model('CityModel', 'city');
+		$this->load->model('MarketingModel', 'salesmen');
 
-			$this->load->view('pages/dashboard/master_marketing', $data);
+		$data['city'] = $this->city->cities();
+		$data['salesmen'] = $this->salesmen->index();
+		$data['marketing'] = $this->salesmen->picMarketing();
+		$data['admin'] = $admin;
+
+		$this->load->view('pages/dashboard/master_marketing', $data);
 		}
 	}
 
-	public function merchant(){
+	public function merchant()
+	{
 		$this->load->model('MerchantModel', 'merchant');
 		$data['merchant'] = $this->merchant->get();
 		$data['count_merchant'] = [
@@ -82,6 +72,74 @@ class Home extends CI_Controller {
 		$this->load->view('pages/dashboard/merchant', $data);
 	}
 
+	public function merchant_detail($id, $merchantType)
+	{
+		$val = [];
+		$transactions = [];
+		$itemPrice = [];
+		$this->load->model('MoopoModel', 'moopo');
+
+		if ($this->input->post()) {
+
+//			return print_r($this->input->post());
+
+			$id = $this->input->post('id');
+			$merchant_id = $this->input->post('merchant_id');
+			$merchantType = $this->input->post('merchant');
+			$itemPrice = $this->input->post('item_price');
+
+			if ($merchantType == 'MOOPO') {
+				$val += $this->moopo->getItems($merchant_id);
+				$transactions += $this->moopo->getTransactions($id);
+
+
+			} elseif ($merchantType == 'KAMSIA') {
+
+			} else {
+
+			}
+		} else {
+			if ($merchantType == 'MOOPO') {
+				$val += $this->moopo->getItems($id);
+
+			} elseif ($merchantType == 'KAMSIA') {
+
+			} else {
+
+			}
+		}
+
+
+		$data = array();
+		$data['merchant_type'] = $merchantType;
+		$data['items'] = $val;
+		$data['transactions'] = $transactions;
+		$data['item_price'] = $itemPrice;
+
+//		return print_r($data['transactions']);
+
+		$this->load->view('pages/dashboard/merchant-detail', $data);
+	}
+
+//	public function transaction_item()
+//	{
+//
+//		$val = [];
+//		if ($merchant == 'MOOPO') {
+//			$this->load->model('MoopoModel', 'moopo');
+//			$val += $this->moopo->getTransactions($id);
+//
+//		} elseif ($merchant == 'KAMSIA') {
+//
+//		} else {
+//
+//		}
+//
+//		$data = array();
+//		$data['items'] = $val;
+//
+//		return redirect($_SERVER['HTTP_REFERER'], $val);
+//	}
 }
 
 /* End of file Home.php */
