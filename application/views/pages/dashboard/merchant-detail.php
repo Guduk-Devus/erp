@@ -92,7 +92,7 @@
 										<?php foreach ($transactions as $transaction):
 											$selling = $transaction->selling;
 											$price = $item_price;
-											$total = $item_price * $transaction->qty;
+											$total = $item_price * $transaction->selling;
 											$subtotal = $total + $transaction->ongkir;
 										?>
 
@@ -112,9 +112,7 @@
 								</div>
 								<br>
 							</div>
-							<div class="card-wrap row">
-							<div class="col-md-6"></div>
-							<div class="col-md-6">
+							<div class="card-wrap">
 								<div class="card-icon shadow-primary bg-success">
 									<i class="fas fa-clipboard-list"></i>
 								</div>
@@ -125,7 +123,6 @@
 									<span><?php echo  "Rp" . number_format($subtotal,2,',','.'); ?></span>
 								</div>
 							</div>
-						</div>
 						<?php endif; ?>
 					</div>
 				</div>

@@ -4,61 +4,28 @@ use Config\Database;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class CityModel extends CI_Model {
+class KamsiaModel extends CI_Model {
 
-	public function getCity($withProvince = FALSE)
+	public function __construct()
 	{
-		if($withProvince){
-			$this->db->select('*, indonesia_provinces.name as province, indonesia_cities.name as city');
-			$this->db->join('indonesia_provinces', 'indonesia_provinces.id = indonesia_cities.province_id', 'inner');
-		}
-		return $this->db->get('indonesia_cities')->result();
+		parent::__construct();
+		$this->kamsia = $this->load->database('kamsia', TRUE);
 	}
 
-	public function cities()
+	public function getItems($id)
 	{
-		return $this->db->get('indonesia_cities')->result();
+		return $this->kamsia->get_where('menus', array('restaurants_id' => $id))->result();
 	}
 
-	public function cityPic()
+	public function getTransactions($id)
 	{
-		$this->db->select('*, indonesia_cities.name as cities');
-		$this->db->join('users', 'indonesia_cities.user_id = users.id', 'inner');
-		$this->db->join('salesmen', 'users.id = salesmen.user_id', 'inner');
+		$this->moopo->select('*, transaction_items.transaction_id, transactions.id, sum(transaction_items.qty) as selling');
+		$this->moopo->from('transaction_items');
+		$this->moopo->join('transactions', 'transaction_items.transaction_id = transactions.id', 'inner');
+		$this->moopo->where('transaction_items.menus_id', $id);
+		$query = $this->moopo->get();
 
-		return $this->db->get('indonesia_cities')->result();
-	}
-
-	public function picCity()
-	{
-		$this->db->select('*, indonesia_provinces.name as province, indonesia_cities.name as city');
-		$this->db->join('indonesia_provinces', 'indonesia_provinces.id = indonesia_cities.province_id', 'inner');
-		$this->db->where('indonesia_cities.user_id', $this->session->userdata('id'));
-
-		return $this->db->get('indonesia_cities')->result();
-	}
-
-	public function updateCityPic($data)
-	{
-		extract($data);
-		$exists = $this->db->get_where('indonesia_cities', ['id', $city_id])->result();
-
-		if (count($exists) > 0) {
-			foreach ($exists as $e) {
-				$this->db->set('indonesia_cities', array('user_id' => null))->where('id', $e->user_id)->update('indonesia_cities');
-			}
-		}
-
-		if ($this->db->where('id', $user_id)) {
-			$this->db->update('users', array('role' => 'pic'));
-
-			$this->db->where('id', $city_id);
-			$this->db->update('indonesia_cities', array('user_id' => $user_id));
-
-			return true;
-		}
-
-		return false;
+		return $query->result();
 	}
 }
 

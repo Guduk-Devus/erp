@@ -78,11 +78,10 @@ class Home extends CI_Controller {
 		$transactions = [];
 		$itemPrice = [];
 		$this->load->model('MoopoModel', 'moopo');
+		$this->load->model('KamsiaModel', 'kamsia');
+		$this->load->model('IRGModel', 'irg');
 
 		if ($this->input->post()) {
-
-//			return print_r($this->input->post());
-
 			$id = $this->input->post('id');
 			$merchant_id = $this->input->post('merchant_id');
 			$merchantType = $this->input->post('merchant');
@@ -92,10 +91,13 @@ class Home extends CI_Controller {
 				$val += $this->moopo->getItems($merchant_id);
 				$transactions += $this->moopo->getTransactions($id);
 
-
 			} elseif ($merchantType == 'KAMSIA') {
+				$val += $this->kamsia->getItems($merchant_id);
+				$transactions += $this->kamsia->getTransactions($id);
 
 			} else {
+				$val += $this->irg->getItems($merchant_id);
+				$transactions += $this->irg->getTransactions($id);
 
 			}
 		} else {
@@ -103,9 +105,10 @@ class Home extends CI_Controller {
 				$val += $this->moopo->getItems($id);
 
 			} elseif ($merchantType == 'KAMSIA') {
+				$val += $this->kamsia->getItems($id);
 
 			} else {
-
+				$val += $this->irg->getItems($id);
 			}
 		}
 
@@ -115,8 +118,6 @@ class Home extends CI_Controller {
 		$data['items'] = $val;
 		$data['transactions'] = $transactions;
 		$data['item_price'] = $itemPrice;
-
-//		return print_r($data['transactions']);
 
 		$this->load->view('pages/dashboard/merchant-detail', $data);
 	}
