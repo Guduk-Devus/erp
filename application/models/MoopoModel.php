@@ -19,10 +19,12 @@ class MoopoModel extends CI_Model {
 
 	public function getTransactions($id)
 	{
-		$this->moopo->select('*, transaction_items.transaction_id, transactions.id, sum(transaction_items.qty) as selling');
+		$where = array('transaction_items.item_id' => $id, 'transaction_items.created_at' => date("Y-m-d"));
+
+		$this->moopo->select('*, transaction_items.transaction_id, transactions.id, sum(transaction_items.qty) as selling, count(transaction_items.qty) as sellings');
 		$this->moopo->from('transaction_items');
 		$this->moopo->join('transactions', 'transaction_items.transaction_id = transactions.id', 'inner');
-		$this->moopo->where('transaction_items.item_id', $id);
+		$this->moopo->where($where);
 		$query = $this->moopo->get();
 
 		return $query->result();

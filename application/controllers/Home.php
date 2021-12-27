@@ -37,31 +37,33 @@ class Home extends CI_Controller {
 			$data = array(
 				'user_id' => $this->input->post('user_id'),
 				'city_id' => $this->input->post('city_id'),
+				'role' => $this->input->post('role'),
 			);
 
-			$this->load->model('CityModel', 'city');
-			if ($this->city->updateCityPic($data)) {
+			$this->load->model('MarketingModel', 'marketing');
+
+			if ($this->marketing->setPIC($data)) {
 				return redirect($_SERVER['HTTP_REFERER']);
-			} else {
-				return "error mas";
 			}
-	 } else {
-		$admin = $this->session->userdata('is_admin');
+	 	} else {
+			$data['role'] = $this->session->userdata('role');
+			$data['admin'] = $this->session->userdata('is_admin');
 
-		$this->load->model('CityModel', 'city');
-		$this->load->model('MarketingModel', 'salesmen');
+			$this->load->model('CityModel', 'city');
+			$this->load->model('MarketingModel', 'salesmen');
 
-		$data['city'] = $this->city->cities();
-		$data['salesmen'] = $this->salesmen->index();
-		$data['marketing'] = $this->salesmen->picMarketing();
-		$data['admin'] = $admin;
+			$data['city'] = $this->city->cities();
+			$data['salesmen'] = $this->salesmen->index();
+			$data['marketing'] = $this->salesmen->picMarketing();
 
-		$this->load->view('pages/dashboard/master_marketing', $data);
+			$this->load->view('pages/dashboard/master_marketing', $data);
 		}
 	}
-
+	
 	public function merchant()
 	{
+		$data['role'] = $this->session->userdata('role');
+		$data['admin'] = $this->session->userdata('is_admin');
 		$this->load->model('MerchantModel', 'merchant');
 		$data['merchant'] = $this->merchant->get();
 		$data['count_merchant'] = [
@@ -69,6 +71,7 @@ class Home extends CI_Controller {
 			'moopo' => $this->merchant->count_merchant('moopo'),
 			'kamsia' => $this->merchant->count_merchant('kamsia'),
 		];
+
 		$this->load->view('pages/dashboard/merchant', $data);
 	}
 

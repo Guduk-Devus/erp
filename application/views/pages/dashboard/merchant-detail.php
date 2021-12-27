@@ -43,23 +43,59 @@
 								<?php foreach ($items as $item):  ?>
 
 								<li class="media">
-									<form action="" method="post" class="item-form">
+									<form action="" method="post" class="item-form col-md-12">
 										<input type="hidden" name="id" value="<?php echo $item->id ?>">
 										<input type="hidden" name="item_price" value="<?php echo $item->price ?>">
-										<input type="hidden" name="merchant_id" value="<?php echo $item->merchant_id ?>">
+										<input type="hidden" name="merchant_id" value="
+											<?php if ($merchant_type == 'MOOPO'): ?>
+												<?php echo $item->merchant_id ?>
+											<?php elseif ($merchant_type == 'KAMSIA'): ?>
+												<?php echo $item->restaurants_id ?>
+											<?php else : ?>
+												<?php echo $item->restaurants_id ?>
+											<?php endif; ?>
+										">
 										<input type="hidden" name="merchant" value="<?php echo $merchant_type ?>">
-<!--										<button type="submit" class="item-submit" style="display: none;"></button>-->
-										<button type="submit" class="item-submit">
 											<div class="activity-icon bg-primary text-white shadow-primary"></div>
 											<div class="media-body">
 												<div class="float-right text-primary"><?php echo  "Rp " . number_format($item->price,2,',','.'); ?></div>
 												<div class="media-title"><?php echo $item->name ?></div>
-												<span class="text-small text-muted"><?php echo $item->description ?></span>
+												<span class="text-small text-muted">
+												<?php if ($merchant_type == 'MOOPO'): ?>
+													<?php echo $item->description ?>
+												<?php elseif ($merchant_type == 'KAMSIA'): ?>
+													<?php echo $item->desc ?>
+												<?php else : ?>
+													<?php echo $item->desc ?>
+												<?php endif; ?>
+												</span>
+												<button type="submit" class="float-right text-primary item-submit"> Cek Sekarang</button>
 											</div>
-										</button>
 									</form>
 								</li>
 								<?php endforeach ?>
+
+								<?php
+								$total_sellings = 0;
+								foreach ($transactions as $transaction):
+									$total_sellings = $total_sellings + $transaction->qty;
+									$selling = $transaction->selling;
+									$price = $item_price;
+									$total = $item_price * $transaction->selling;
+									$subtotal = $total + $transaction->ongkir;
+
+								endforeach
+								?>
+
+								<li class="media">
+									<form action="" method="post" class="item-form col-md-12">
+										<div class="activity-icon bg-primary text-white shadow-primary"></div>
+										<div class="media-body">
+											<div class="float-right text-primary"><?php echo $total_sellings ?></div>
+											<div class="media-title">Total Penjualan</div>
+										</div>
+									</form>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -89,16 +125,8 @@
 									</div>
 								</div>
 								<div class="card-stats-items">
-										<?php foreach ($transactions as $transaction):
-											$selling = $transaction->selling;
-											$price = $item_price;
-											$total = $item_price * $transaction->selling;
-											$subtotal = $total + $transaction->ongkir;
-										?>
-
-										<?php endforeach; ?>
 										<div class="card-stats-item">
-											<div class="card-stats-item-count"><?php echo $selling ?></div>
+											<div class="card-stats-item-count"><?php echo number_format($selling, 0, ',', '.'); ?></div>
 											<div class="card-stats-item-label">Laku</div>
 										</div>
 										<div class="card-stats-item">

@@ -37,29 +37,6 @@ class CityModel extends CI_Model {
 
 		return $this->db->get('indonesia_cities')->result();
 	}
-
-	public function updateCityPic($data)
-	{
-		extract($data);
-		$exists = $this->db->get_where('indonesia_cities', ['id', $city_id])->result();
-
-		if (count($exists) > 0) {
-			foreach ($exists as $e) {
-				$this->db->set('indonesia_cities', array('user_id' => null))->where('id', $e->user_id)->update('indonesia_cities');
-			}
-		}
-
-		if ($this->db->where('id', $user_id)) {
-			$this->db->update('users', array('role' => 'pic'));
-
-			$this->db->where('id', $city_id);
-			$this->db->update('indonesia_cities', array('user_id' => $user_id));
-
-			return true;
-		}
-
-		return false;
-	}
 }
 
 /* End of file CityModel.php */

@@ -19,10 +19,11 @@ class IRGModel extends CI_Model {
 
 	public function getTransactions($id)
 	{
-		$this->irg->select('*, transaction_items.transaction_id, transactions.id, sum(transaction_items.qty) as selling');
+		$this->irg->select('*, transaction_details.transactions_id, transactions.id, sum(transaction_details.qty) as selling');
 		$this->irg->from('transaction_items');
-		$this->irg->join('transactions', 'transaction_items.transaction_id = transactions.id', 'inner');
-		$this->irg->where('transaction_items.menus_id', $id);
+		$this->irg->join('transactions', 'transaction_details.transactions_id = transactions.id', 'inner');
+		$this->kamsia->where('transaction_details.created_at', date('D-M-Y'));
+		$this->irg->where('transaction_details.menus_id', $id);
 		$query = $this->irg->get();
 
 		return $query->result();

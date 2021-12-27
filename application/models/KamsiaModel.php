@@ -19,11 +19,13 @@ class KamsiaModel extends CI_Model {
 
 	public function getTransactions($id)
 	{
-		$this->moopo->select('*, transaction_items.transaction_id, transactions.id, sum(transaction_items.qty) as selling');
-		$this->moopo->from('transaction_items');
-		$this->moopo->join('transactions', 'transaction_items.transaction_id = transactions.id', 'inner');
-		$this->moopo->where('transaction_items.menus_id', $id);
-		$query = $this->moopo->get();
+		$where = array('transaction_details.menus_id' => $id, 'transaction_details.created_at' => date("Y-m-d"));
+
+		$this->kamsia->select('*, transaction_details.transactions_id, transactions.id, sum(transaction_details.qty) as selling');
+		$this->kamsia->from('transaction_details');
+		$this->kamsia->join('transactions', 'transaction_details.transactions_id = transactions.id', 'inner');
+		$this->kamsia->where($where);
+		$query = $this->kamsia->get();
 
 		return $query->result();
 	}

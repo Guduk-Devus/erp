@@ -39,6 +39,43 @@ class MarketingModel extends CI_Model {
 	{
 		return $this->db->get_where('salesmen', ['user_id' => $this->session->userdata('id')])->row()->code_referral;
 	}
+
+	public function setPIC($data)
+	{
+		extract($data);
+		$exists = $this->db->get_where('indonesia_cities', ['id', $city_id])->result();
+
+		if (count($exists) > 0) {
+			foreach ($exists as $e) {
+				$this->db->set('indonesia_cities', array('user_id' => null))->where('id', $e->user_id)->update('indonesia_cities');
+			}
+		}
+
+		if ($role == 'pic_pusat') {
+			$pusat = $this->db->get_where('users', ['role', 'pic_pusat'])->result();
+
+			if (count($pusat) > 0) {
+				foreach ($pusat as $e) {
+					$this->db->set('users', array('role' => null, 'is_admin' => 0))->where('id', $e->user_id)->update('users');
+				}
+			}
+
+			$this->db->where('id', $user_id);
+			$this->db->update('users', array('role' => 'pic_pusat', 'is_admin' => 1));
+
+			return true;
+		} else {
+			$this->db->where('id', $user_id);
+			$this->db->update('users', array('role' => 'pic_kota'));
+
+			$this->db->where('id', $city_id);
+			$this->db->update('indonesia_cities', array('user_id' => $user_id));
+
+			return true;
+		}
+
+		return false;
+	}
 }
 
 /* End of file MarketingModel.php */

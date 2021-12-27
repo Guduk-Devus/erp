@@ -17,7 +17,7 @@
           		<h4>Data Marketing</h4>
           		<div class="card-header-action">
           			<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#picModal"><i class="fas fa-user-cog"></i> Atur PIC</a>
-          			<a href="<?php echo base_url('home/store_marketing') ?>" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Tambah Marketing</a>
+<!--          			<a href="--><?php //echo base_url('home/store_marketing') ?><!--" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Tambah Marketing</a>-->
           		</div>
           	</div>
 			  <div class="card-body">
@@ -116,7 +116,7 @@
 		  <div class="modal-dialog" role="document">
 			  <div class="modal-content">
 				  <div class="modal-header">
-					  <h5 class="modal-title" id="exampleModalLabel">Set City PIC</h5>
+					  <h5 class="modal-title" id="exampleModalLabel">Set PIC</h5>
 					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						  <span aria-hidden="true">&times;</span>
 					  </button>
@@ -134,6 +134,17 @@
 					  </div>
 
 					  <div class="form-group">
+						  <label>Role</label>
+						  <select class="custom-select custom-select-sm" name="role" id="role">
+							  <option value="" selected>- Pick Role -</option>
+							  <?php if ($role == null && $admin == '1'): ?>
+							  	<option value="pic_pusat">PIC Pusat</option>
+							  <?php endif ?>
+							  <option value="pic_kota">PIC Kota</option>
+						  </select>
+					  </div>
+
+					  <div class="form-group" id="city_form">
 						  <label>City</label>
 						  <select class="custom-select custom-select-sm" name="city_id" id="city_filter">
 							  <option value="" selected>- Pick City -</option>
@@ -162,6 +173,16 @@
         { "sortable": false, "targets": [5] }
       ]
     });
+
+	// $(document).ready(function () {
+		$('#role').change(function() {
+			if($('#role').val() == 'pic_pusat') {
+				$('#city_form').remove();
+			} else {
+				$('#city_form').show();
+			}
+		})
+	// })
   </script>
 </body>
 </html>

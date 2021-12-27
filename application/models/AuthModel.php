@@ -27,6 +27,7 @@ class AuthModel extends CI_Model {
 	}
 
 	public function cekRef($s, $returnBool = TRUE){
+		// $this->db->where('code_referral', $s);
 		$q = $this->db->get_where('salesmen', ['code_referral' => $s]);
 		if ($returnBool) {
 			return $q->num_rows() > 0 ? TRUE : FALSE;
@@ -36,8 +37,14 @@ class AuthModel extends CI_Model {
 	}
 
 	public function getSalesmanByRef($ref){
-		$user_id = $this->cekRef($ref, FALSE)->id;
-		return $this->db->get('salesmen', ['id', $user_id])->row();
+		// return $ref;
+		$user_id = $this->cekRef($ref, FALSE);
+		// return $user_id->id;
+		
+		 $this->db->get_where('salesmen', ['id', $user_id->id])->row();
+		 return $this->db->last_query();
+		
+		
 	}
 
 }
