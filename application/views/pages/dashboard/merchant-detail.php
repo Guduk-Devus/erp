@@ -78,7 +78,7 @@
 								<?php
 								$total_sellings = 0;
 								foreach ($transactions as $transaction):
-									$total_sellings = $total_sellings + $transaction->qty;
+									$total_sellings += $transaction->total_sale;
 									$selling = $transaction->selling;
 									$price = $item_price;
 									$total = $item_price * $transaction->selling;

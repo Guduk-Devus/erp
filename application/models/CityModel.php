@@ -9,7 +9,7 @@ class CityModel extends CI_Model {
 	public function getCity($withProvince = FALSE)
 	{
 		if($withProvince){
-			$this->db->select('*, indonesia_provinces.name as province, indonesia_cities.name as city');
+			$this->db->select('*, indonesia_provinces.name as province, indonesia_cities.name as city, indonesia_cities.id as city_id');
 			$this->db->join('indonesia_provinces', 'indonesia_provinces.id = indonesia_cities.province_id', 'inner');
 		}
 		return $this->db->get('indonesia_cities')->result();
@@ -36,6 +36,15 @@ class CityModel extends CI_Model {
 		$this->db->where('indonesia_cities.user_id', $this->session->userdata('id'));
 
 		return $this->db->get('indonesia_cities')->result();
+	}
+
+	public function setTarget($data)
+	{
+		extract($data);
+		$this->db->where('id', $id);
+		$this->db->update('indonesia_cities', array('target' => $target));
+
+		return true;
 	}
 }
 

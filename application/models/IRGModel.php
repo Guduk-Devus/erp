@@ -19,7 +19,7 @@ class IRGModel extends CI_Model {
 
 	public function getTransactions($id)
 	{
-		$this->irg->select('*, transaction_details.transactions_id, transactions.id, sum(transaction_details.qty) as selling');
+		$this->irg->select('*, transaction_details.transactions_id, transactions.id, sum(transaction_details.qty) as selling, count(transaction_details.id) as total_sale');
 		$this->irg->from('transaction_items');
 		$this->irg->join('transactions', 'transaction_details.transactions_id = transactions.id', 'inner');
 		$this->kamsia->where('transaction_details.created_at', date('D-M-Y'));

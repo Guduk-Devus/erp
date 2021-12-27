@@ -29,7 +29,7 @@
 						  <td>Email</td>
 						  <td>No Telp</td>
 						  <td>Kota</td>
-						  <td>Refferal Code</td>
+<!--						  <td>Refferal Code</td>-->
 						  <td></td>
 						  </thead>
 						  <tbody>
@@ -40,7 +40,7 @@
 								  <td><?php echo $s->email ?></td>
 								  <td><?php echo $s->no_telp ?></td>
 								  <td><?php echo $s->name ?></td>
-								  <td><?php echo $s->code_referral ?></td>
+<!--								  <td>--><?php //echo $s->code_referral ?><!--</td>-->
 								  <td>
 									  <a href="<?php echo base_url('home/detail_marketing') ?>" class="btn btn-info"><i class="fas fa-info"></i>&nbsp; Detail</a>
 									  <!--										--><?php //if($s->city_id != 0): ?>
@@ -146,7 +146,7 @@
 
 					  <div class="form-group" id="city_form">
 						  <label>City</label>
-						  <select class="custom-select custom-select-sm" name="city_id" id="city_filter">
+						  <select class="custom-select custom-select-sm select2" name="city_id" id="city_filter">
 							  <option value="" selected>- Pick City -</option>
 							  <?php foreach ($city as $key => $c): ?>
 								  <option value="<?php echo $c->id ?>"><?php echo $c->name ?></option>
