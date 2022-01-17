@@ -69,6 +69,7 @@
           			<table class="table table-striped text-center">
           				<thead>
           					<td>#</td>
+							<td>Nama Marketing</td>
           					<td>Nama Merchant</td>
           					<td>Jenis Merchant</td>
           					<td>Tgl Masuk</td>

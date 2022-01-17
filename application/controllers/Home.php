@@ -64,7 +64,9 @@ class Home extends CI_Controller {
 	{
 		$data['role'] = $this->session->userdata('role');
 		$data['admin'] = $this->session->userdata('is_admin');
+
 		$this->load->model('MerchantModel', 'merchant');
+
 		$data['merchant'] = $this->merchant->get();
 		$data['count_merchant'] = [
 			'irg' => $this->merchant->count_merchant('irg'),
@@ -85,6 +87,7 @@ class Home extends CI_Controller {
 		$this->load->model('IRGModel', 'irg');
 
 		if ($this->input->post()) {
+//			return print_r(date('Y-m-d'));
 			$id = $this->input->post('id');
 			$merchant_id = $this->input->post('merchant_id');
 			$merchantType = $this->input->post('merchant');

@@ -20,8 +20,7 @@ class KamsiaModel extends CI_Model {
 	public function getTransactions($id)
 	{
 //		bug 'transactions.created_at' => date("Y-m-d")
-		$where = array('transaction_details.menus_id' => $id);
-
+		$where = array('transaction_details.menus_id' => $id, 'transaction_details.created_at >=' => date('Y-m-d'));
 
 		$this->kamsia->select('*, transaction_details.transactions_id, transactions.id, sum(transaction_details.qty) as selling, count(transaction_details.id) as total_sale');
 		$this->kamsia->from('transaction_details');

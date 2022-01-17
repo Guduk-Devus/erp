@@ -78,11 +78,11 @@
 								<?php
 								$total_sellings = 0;
 								foreach ($transactions as $transaction):
-									$total_sellings += $transaction->total_sale;
+									$total_sellings = $transaction->total_sale;
 									$selling = $transaction->selling;
 									$price = $item_price;
 									$total = $item_price * $transaction->selling;
-									$subtotal = $total + $transaction->ongkir;
+//									$subtotal = $total + $transaction->ongkir;
 
 								endforeach
 								?>
@@ -102,25 +102,35 @@
 				</div>
 				<div class="col-md-8">
 					<div class="card card-menu card-statistic-2">
-						<?php if (!empty(@$transactions)): ?>
+						<?php
+							$months = array();
+							$numbMonth = array();
+							$currentMonth = (int)date('m');
+							$currentDateMonth = date('F');
+
+							for ($x = $currentMonth; $x < $currentMonth + 12; $x++) {
+								$months[] = date('F', mktime(0, 0, 0, $x, 1));
+								$numbMonth[] = date('m', mktime(0, 0, 0, $x, 1));
+
+								$combine = array_combine($months, $numbMonth);
+							}
+
+//							echo print_r($combine);
+
+							if (!empty(@$transactions)):
+						?>
 							<div class="card-stats">
 								<div class="card-stats-title">Statistik Penjualan -
 									<div class="dropdown d-inline">
-										<a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#" id="orders-month" aria-expanded="false">August</a>
+										<a class="font-weight-600 dropdown-toggle" data-toggle="dropdown" href="#" id="orders-month" aria-expanded="false"><?php echo $currentDateMonth; ?></a>
 										<ul class="dropdown-menu dropdown-menu-sm" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 18px, 0px); top: 0px; left: 0px; will-change: transform;">
 											<li class="dropdown-title">Select Month</li>
-											<li><a href="#" class="dropdown-item">January</a></li>
-											<li><a href="#" class="dropdown-item">February</a></li>
-											<li><a href="#" class="dropdown-item">March</a></li>
-											<li><a href="#" class="dropdown-item">April</a></li>
-											<li><a href="#" class="dropdown-item">May</a></li>
-											<li><a href="#" class="dropdown-item">June</a></li>
-											<li><a href="#" class="dropdown-item">July</a></li>
-											<li><a href="#" class="dropdown-item active">August</a></li>
-											<li><a href="#" class="dropdown-item">September</a></li>
-											<li><a href="#" class="dropdown-item">October</a></li>
-											<li><a href="#" class="dropdown-item">November</a></li>
-											<li><a href="#" class="dropdown-item">December</a></li>
+											<?php foreach ($combine as $key => $month) : ?>
+												<li>
+<!--													<input type="hidden" name="month" value="--><?php //echo $month; ?><!--">-->
+													<a href="#" data-month="<?php echo $month; ?>" class="dropdown-item btn-month"><?php echo $key; ?></a>
+												</li>
+											<?php endforeach; ?>
 										</ul>
 									</div>
 								</div>
@@ -148,7 +158,7 @@
 									<h4>Total Penjualan</h4>
 								</div>
 								<div class="card-body">
-									<span><?php echo  "Rp" . number_format($subtotal,2,',','.'); ?></span>
+									<span><?php echo  "Rp" . number_format($total,2,',','.'); ?></span>
 								</div>
 							</div>
 						<?php endif; ?>
@@ -167,6 +177,13 @@
 	  $(document).ready(function () {
 		  $('.menu-btn').click(function () {
 			  $('.item-submit').click();
+		  })
+
+		  $('.btn-month').click(function () {
+		  	  val month = $(this).data('month');
+			  $.post(this, {month: month}, function () {
+
+			  });
 		  })
 	  })
   </script>
