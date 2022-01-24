@@ -61,10 +61,12 @@
           <div class="card">
           	<div class="card-header">
           		<h4>Data Marketing</h4>
+				<?php if($role == 'pic_pusat'): ?>
           		<div class="card-header-action">
           			<a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#picModal"><i class="fas fa-user-cog"></i> Atur PIC</a>
-          			<a href="<?php echo base_url('home/store_marketing') ?>" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Tambah Marketing</a>
+<!--          			<a href="--><?php //echo base_url('home/store_marketing') ?><!--" class="btn btn-sm btn-info"><i class="fas fa-plus"></i> Tambah Marketing</a>-->
           		</div>
+				<?php endif ?>
           	</div>
           	<div class="card-body">
           		<div class="table-responsive">
@@ -75,7 +77,7 @@
           					<td>Email</td>
           					<td>No Telp</td>
 							<td>Kota</td>
-          					<td>Refferal Code</td>
+<!--          					<td>Refferal Code</td>-->
           					<td></td>
           				</thead>
           				<tbody>
@@ -86,8 +88,9 @@
           							<td><?php echo $s->email ?></td>
           							<td><?php echo $s->no_telp ?></td>
           							<td><?php echo $s->name ?></td>
-          							<td><?php echo $s->code_referral ?></td>
-          							<td>
+<!--          							<td>--><?php //echo $s->code_referral ?><!--</td>-->
+									<?php if($role == 'pic_pusat'): ?>
+          								<td>
           								<a href="<?php echo base_url('home/detail_marketing') ?>" class="btn btn-info"><i class="fas fa-info"></i>&nbsp; Detail</a>
 <!--										--><?php //if($s->city_id != 0): ?>
 <!--          									<a href="--><?php //echo base_url('city/cityPic/' . $s->id) ?><!--" class="btn btn-primary"><i class="fas fa-plus"></i>&nbsp; Set City PIC</a>-->
@@ -96,6 +99,7 @@
 <!--										--><?php //endif ?>
           								<a href="<?php echo base_url('home/delete_marketing') ?>" class="btn btn-danger"><i class="fas fa-trash"></i>&nbsp; Delete</a>
           							</td>
+									<?php endif ?>
           						</tr>
           					<?php endforeach ?>
           				</tbody>

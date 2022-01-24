@@ -22,6 +22,8 @@ class MarketingModel extends CI_Model {
 		$this->db->from('salesmen');
 		$this->db->join('users', 'users.id = salesmen.user_id', 'inner');
 		$this->db->join('indonesia_cities city', 'city.id = salesmen.city_id', 'inner');
+		$this->db->where('city.user_id', $this->session->userdata('id'));
+//		$this->db->where('salesmen.user_id', $this->session->userdata('id'));
 
 		return $this->db->get()->result();
 	}

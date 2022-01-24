@@ -10,8 +10,9 @@ class AuthModel extends CI_Model {
 		return $this->db->get('users')->row();
 	}
 
-	public function getSalesmanByUser($user_id){
-		return $this->db->get('salesmen', ['id', $user_id])->row();
+	public function getSalesmanByUser($user_id)
+	{
+		return $this->db->get_where('salesmen', array('user_id' => $user_id))->row();
 	}
 
 	public function insert($data)

@@ -20,9 +20,7 @@
         <li class="nav-item">
           <a href="<?php echo base_url('/home/marketing') ?>" class="nav-link"><i class="fas fa-users"></i> <span>Master Marketing</span></a>
         </li>
-      <?php endif ?>
-
-	  <?php if ($this->session->userdata('role') == 'pic') : ?>
+	  <?php elseif ($this->session->userdata('role') == 'pic_kota' or $this->session->userdata('role') == 'pic_pusat') : ?>
 		  <li class="menu-header">Master Data</li>
 		  <li class="nav-item">
 			  <a href="<?php echo base_url('/city') ?>" class="nav-link"><i class="fas fa-map-marked-alt"></i> <span>Master Kota</span></a>
